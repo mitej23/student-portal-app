@@ -4,19 +4,6 @@ import { AuthStore, initStore } from "../store";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 
-// export default function Index() {
-
-//   return (
-//     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//       <Link href="/page1">Page 1</Link>
-//       <Link href="/page2">Page 2</Link>
-//       <Link href="/signup">SIgn up</Link>
-//       <Link href="/login">Login</Link>
-//     </View>
-//   );
-// }
-
-
 const Index = () => {
 
   const segments = useSegments();
