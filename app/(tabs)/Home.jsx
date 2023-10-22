@@ -15,26 +15,26 @@ const Home = () => {
       name: "Mitej Madan",
       course: "MCA",
       batch: '2025',
-      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-      image: 'https://picsum.photos/200/300',
+      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to. ",
+      image: 'https://picsum.photos/200',
       upload: '13-10-2023'
     },
     {
       id: '2',
-      name: "Mitej Madan",
+      name: "Karthik Lahotiya",
       course: "MCA",
       batch: '2025',
-      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-      image: 'https://picsum.photos/200/300',
+      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to. ",
+      image: 'https://picsum.photos/200',
       upload: '13-10-2023'
     },
     {
       id: '3',
-      name: "Mitej Madan",
+      name: "Rupesh Rai",
       course: "MCA",
       batch: '2025',
-      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-      image: 'https://picsum.photos/200/300',
+      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to. ",
+      image: 'https://picsum.photos/200',
       upload: '13-10-2023'
     },
     {
@@ -42,8 +42,8 @@ const Home = () => {
       name: "Mitej Madan",
       course: "MCA",
       batch: '2025',
-      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-      image: 'https://picsum.photos/200/300',
+      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to. ",
+      image: 'https://picsum.photos/200',
       upload: '13-10-2023'
     },
     {
@@ -51,8 +51,8 @@ const Home = () => {
       name: "Mitej Madan",
       course: "MCA",
       batch: '2025',
-      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-      image: 'https://picsum.photos/200/300',
+      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to. ",
+      image: 'https://picsum.photos/200',
       upload: '13-10-2023'
     }
   ])

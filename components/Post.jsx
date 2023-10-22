@@ -1,5 +1,6 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { FontAwesome } from '@expo/vector-icons';
 
 const Post = ({ data }) => {
   const { name, course, batch, content, image, date, id } = data.item
@@ -7,8 +8,11 @@ const Post = ({ data }) => {
   return (
     <View style={styles.postContainer} key={id}>
       <View style={styles.postHead}>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.course}>( {course} - {batch} )</Text>
+        <FontAwesome name="user-circle" size={32} color="black" />
+        <View style={styles.postHeadText}>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.course}>( {course} - {batch} )</Text>
+        </View>
       </View>
       <Image
         style={styles.image}
@@ -32,17 +36,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   postHead: {
-    flexDirection: 'column',
+    flexDirection: 'row',
     marginBottom: 4
+  },
+  postHeadText: {
+    marginLeft: 10,
   },
   name: {
     width: 'auto',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold'
   },
   course: {
     color: '#00000099',
-    fontSize: 12,
+    fontSize: 10,
   },
   image: {
     width: 'auto',
@@ -55,6 +62,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flexWrap: 'wrap',
-    textAlign: 'justify'
+    textAlign: 'justify',
+    marginVertical: 4
   }
 })
