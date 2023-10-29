@@ -6,8 +6,8 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth"
-import { ref } from "firebase/database";
-import { app, auth } from "./firebase.js";
+import { app, auth, db } from "./firebase.js";
+import { collection, doc, setDoc } from "firebase/firestore";
 
 export const AuthStore = new Store({
   isLoggedIn: false,
@@ -59,22 +59,32 @@ export const appSignUp = async (email,
   try {
     // this will trigger onAuthStateChange to update the store..
     // const resp = await createUserWithEmailAndPassword(auth, email, password);
-    const resp = createUserWithEmailAndPassword(auth, email, password).then((user) => {
+    // Add a new document with a generated id
+
+
+    const resp = await createUserWithEmailAndPassword(auth, email, password).then(async ({ user }) => {
       // The user has been signed up successfully.
       // Store the user's data in the database.
-      ref('users/' + user.uid).set({
-        email: email,
-        password: password,
-        firstName,
-        lastName,
-        course,
-        batch
-      });
+      try {
+        const newUserRef = doc(collection(db, "users"));
+        await setDoc(newUserRef, {
+          email: email,
+          firstName,
+          lastName,
+          course,
+          batch,
+          userId: user.uid
+        });
+        return user
+      } catch (error) {
+        console.log(error)
+      }
+
     });
 
     // add the displayName
     displayName = firstName + " " + lastName
-    await updateProfile(resp.user, { displayName });
+    await updateProfile(resp, { displayName });
 
     AuthStore.update((store) => {
       store.user = auth.currentUser;

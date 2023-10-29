@@ -20,6 +20,11 @@ const Settings = () => {
   const [batch, setBatch] = useState();
   const [interactionComplete, setInteractionComplete] = useState(true);
 
+  const logout = async () => {
+    const resp = await appSignOut(email, password);
+    router?.replace("/(auth)/login");
+  }
+
   return (
     <View style={{ marginTop: insets.top, paddingVertical: 12, flexDirection: 'column', flexDirection: "column", backgroundColor: "white" }}>
       {/* header */}
@@ -115,6 +120,12 @@ const Settings = () => {
 
               </Picker>
             </View>
+            <TouchableOpacity
+              onPress={logout}
+              style={styles.submit}
+            >
+              <Text style={styles.submitText}>Sign Out</Text>
+            </TouchableOpacity>
           </View>
         ) : (
           <Loader />
@@ -181,7 +192,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   submitText: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "600",
     margin: 15,
     textAlign: "center",
@@ -236,15 +247,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     fontWeight: 'bold'
-  },
-  submit: {
-    borderRadius: 20,
-    backgroundColor: "#F45764",
-    color: "white",
-    alignContent: "center",
-    justifyContent: "center",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
   },
   headBtnText: {
     fontSize: 12,
