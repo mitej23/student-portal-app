@@ -19,7 +19,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [interactionComplete, setInteractionComplete] = useState(true);
-
+  const [loading, setLoading] = useState(false)
 
   return (
     <View style={styles.page}>
@@ -27,7 +27,6 @@ export default function Login() {
         <>
           <Text style={styles.header}>Log In</Text>
           <Text style={styles.label}>Email:</Text>
-
           <TextInput
             type="email"
             placeholder="Email"
@@ -56,17 +55,26 @@ export default function Login() {
               setPassword(e);
             }}
           ></TextInput>
-
-          <TouchableOpacity style={styles.submit} onPress={async () => {
-            const resp = await appSignIn(email, password);
-            if (resp?.user) {
-              router?.replace("/(tabs)/Home");
-            } else {
-              console.log(resp.error)
-              Alert.alert("Login Error", resp.error?.message)
+          <TouchableOpacity
+            style={styles.submit} 
+            disabled={loading}
+            onPress={async () => {
+              setLoading(true)
+              const resp = await appSignIn(email, password);
+              setLoading(false)
+              if (resp?.user) {
+                router?.replace("/(tabs)/Home");
+              } else {
+                console.log(resp.error)
+                Alert.alert("Login Error", resp.error?.message)
+              }
+            }}
+          >
+            {
+              loading ?
+                <ActivityIndicator style={styles.submitText} size="small" color="#fff" /> :
+                <Text style={styles.submitText}>Sign In</Text>
             }
-          }}>
-            <Text style={styles.submitText}>Sign In</Text>
           </TouchableOpacity>
 
           <View

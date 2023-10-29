@@ -1,61 +1,38 @@
-import { Text, View, TextInput, StyleSheet, Alert, TouchableOpacity, FlatList } from "react-native";
+import { Text, View, TextInput, StyleSheet, Alert, TouchableOpacity, FlatList, RefreshControl } from "react-native";
 import { AuthStore, appSignOut } from "../../store.js";
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Link, useRouter } from "expo-router";
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Post from "../../components/Post.jsx";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { db } from "../../firebase.js";
 
 const Home = () => {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [refreshing, setRefreshing] = useState(false)
 
-  const [posts, setPosts] = useState([
-    {
-      id: '1',
-      name: "Mitej Madan",
-      course: "MCA",
-      batch: '2025',
-      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to. ",
-      image: 'https://picsum.photos/200',
-      upload: '13-10-2023'
-    },
-    {
-      id: '2',
-      name: "Karthik Lahotiya",
-      course: "MCA",
-      batch: '2025',
-      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to. ",
-      image: 'https://picsum.photos/200',
-      upload: '13-10-2023'
-    },
-    {
-      id: '3',
-      name: "Rupesh Rai",
-      course: "MCA",
-      batch: '2025',
-      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to. ",
-      image: 'https://picsum.photos/200',
-      upload: '13-10-2023'
-    },
-    {
-      id: '4',
-      name: "Mitej Madan",
-      course: "MCA",
-      batch: '2025',
-      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to. ",
-      image: 'https://picsum.photos/200',
-      upload: '13-10-2023'
-    },
-    {
-      id: '5',
-      name: "Mitej Madan",
-      course: "MCA",
-      batch: '2025',
-      content: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to. ",
-      image: 'https://picsum.photos/200',
-      upload: '13-10-2023'
-    }
-  ])
+  const [posts, setPosts] = useState([])
+
+  const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'))
+  const getPosts = async () => {
+    const postSnapshot = await getDocs(q)
+    const postTemp = []
+    postSnapshot.docs.map((p) => {
+      postTemp.push(p.data())
+    })
+    setPosts(postTemp)
+    return postTemp
+  }
+
+  const loadPosts = async () => {
+    const temp = await getPosts()
+    console.log(temp)
+  }
+
+  useEffect(async () => {
+    return await getPosts()
+  }, [])
 
   return (
     <View style={{ marginTop: insets.top, paddingVertical: 12, flexDirection: 'column', flexDirection: "column", backgroundColor: "white" }}>
@@ -73,6 +50,9 @@ const Home = () => {
         renderItem={(post) => <Post data={post} />}
         keyExtractor={post => post.id}
         contentContainerStyle={styles.postContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={loadPosts} />
+        }
       />
     </View>
 

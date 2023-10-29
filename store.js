@@ -7,7 +7,7 @@ import {
   updateProfile,
 } from "firebase/auth"
 import { app, auth, db } from "./firebase.js";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
 
 export const AuthStore = new Store({
   isLoggedIn: false,
@@ -27,8 +27,15 @@ const unsub = onAuthStateChanged(auth, (user) => {
 export const appSignIn = async (email, password) => {
   try {
     const resp = await signInWithEmailAndPassword(auth, email, password);
+    let userId = resp?.user?.email
+
+    // firestore retrieve user
+    const q = query(collection(db, 'users'), where('email', '==', userId))
+    const userSnapshot = await getDocs(q)
+    const userData = userSnapshot.docs[0].data();
+
     AuthStore.update((store) => {
-      store.user = resp.user;
+      store.user = userData
       store.isLoggedIn = resp.user ? true : false;
     });
     return { user: auth.currentUser };

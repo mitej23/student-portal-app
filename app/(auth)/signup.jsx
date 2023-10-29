@@ -1,4 +1,4 @@
-import { Text, View, TextInput, StyleSheet, StatusBar, SafeAreaView, ScrollView, TouchableOpacity, Alert } from "react-native";
+import { Text, View, TextInput, StyleSheet, StatusBar, SafeAreaView, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from "react-native";
 import { useRef, useState } from "react";
 import { AuthStore, appSignUp } from "../../store.js";
 import { Stack, useRouter } from "expo-router";
@@ -15,6 +15,7 @@ export default function Signup() {
   const [course, setCourse] = useState();
   const [batch, setBatch] = useState();
   const [interactionComplete, setInteractionComplete] = useState(true);
+  const [loading, setLoading] = useState(false)
 
 
   return (
@@ -110,7 +111,9 @@ export default function Signup() {
               </Picker>
             </View>
             <TouchableOpacity style={styles.submit}
+              disabled={loading}
               onPress={async () => {
+                setLoading(true)
                 const resp = await appSignUp(
                   email,
                   password,
@@ -119,6 +122,7 @@ export default function Signup() {
                   course,
                   batch
                 );
+                setLoading(false)
                 if (resp?.user) {
                   router?.replace("/(tabs)/Home");
                 } else {
@@ -127,7 +131,11 @@ export default function Signup() {
                 }
               }}
             >
-              <Text style={styles.submitText}>Register</Text>
+              {
+                loading ?
+                  <ActivityIndicator style={styles.submitText} size="small" color="#fff" /> :
+                  <Text style={styles.submitText}>Register</Text>
+              }
             </TouchableOpacity>
 
             <View

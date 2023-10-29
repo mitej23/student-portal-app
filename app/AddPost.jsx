@@ -1,4 +1,4 @@
-import { Text, View, TextInput, StyleSheet, Alert, TouchableOpacity, Image } from "react-native";
+import { Text, View, TextInput, StyleSheet, Alert, TouchableOpacity, Image, ActivityIndicator, ToastAndroid } from "react-native";
 import React, { useState } from 'react'
 import { Link, useRouter } from "expo-router";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -6,10 +6,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import { AntDesign } from '@expo/vector-icons';
 import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import * as firestore from 'firebase/firestore'
+import { Timestamp, collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
 import 'react-native-get-random-values';
 import * as uuid from 'uuid';
 import { AuthStore } from "../store";
+import { db } from "../firebase";
 
 const AddPost = () => {
   const router = useRouter();
@@ -19,6 +20,7 @@ const AddPost = () => {
   const [postTextNoOfLines, setPostTextNoOfLines] = useState(4)
   const [postImage, setPostImage] = useState(null)
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
   const { user } = AuthStore.useState();
 
   const handleBack = () => {
@@ -87,22 +89,37 @@ const AddPost = () => {
 
   const uploadPost = async () => {
     if (!postText) {
-      Alert.alert("Text cannot be empty.")
+      Alert.alert("Required Field!!", "Text cannot be empty.")
+      return
     }
 
-    console.log(user)
+    const user = AuthStore?.currentState?.user
+    setLoading(true)
 
-    let imageUrl = await uploadImageAsync(result.assets[0].uri)
+    try {
+      let imageUrl = ''
+      if (postImage) imageUrl = await uploadImageAsync(postImage)
 
-    // firestore()
-    //   .collection('Posts')
-    //   .add({
-    //     content: postText,
-    //     postImage: imageUrl,
-    //   })
-    //   .then(() => {
-    //     console.log('User added!');
-    //   });
+      const timestamp = Timestamp.now().seconds
+      
+      const newPostRef = doc(collection(db, 'posts'));
+      await setDoc(newPostRef, {
+        content: postText,
+        postImage: imageUrl,
+        createdAt: timestamp,
+        updatedAt: timestamp,
+        ...user
+      }).then(() => {
+        ToastAndroid.show('Post Added Successfully!', ToastAndroid.SHORT);
+        setPostImage(null)
+        setPostText('')
+        router.back()
+      })
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
 
   }
 
@@ -154,8 +171,12 @@ const AddPost = () => {
           // an error or no image selected 
           <Text style={styles.errorText}>{error}</Text>
         )}
-        <TouchableOpacity onPress={uploadPost} style={styles.submit}>
-          <Text style={styles.submitText}>Upload Post</Text>
+        <TouchableOpacity disabled={loading} onPress={uploadPost} style={styles.submit}>
+          {
+            loading ?
+              <ActivityIndicator style={styles.submitText} size="small" color="#fff" /> :
+              <Text style={styles.submitText}>Upload Post</Text>
+          }
         </TouchableOpacity>
       </View>
       {/* </ScrollView> */}

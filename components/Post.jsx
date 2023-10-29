@@ -3,23 +3,28 @@ import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
 
 const Post = ({ data }) => {
-  const { name, course, batch, content, image, date, id } = data.item
-  console.log(image)
+  const { firstName, lastName, course, batch, content, postImage, date, id } = data.item
+
+  console.log(postImage)
+
   return (
     <View style={styles.postContainer} key={id}>
       <View style={styles.postHead}>
         <FontAwesome name="user-circle" size={32} color="black" />
         <View style={styles.postHeadText}>
-          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.name}>{firstName} {lastName}</Text>
           <Text style={styles.course}>( {course} - {batch} )</Text>
         </View>
       </View>
-      <Image
-        style={styles.image}
-        source={{
-          uri: image,
-        }}
-      />
+      {
+        postImage && <Image
+          style={styles.image}
+          source={{
+            uri: postImage,
+          }}
+        />
+      }
+
       <Text style={styles.content}>{content}</Text>
     </View>
   )
@@ -52,13 +57,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   image: {
-    width: 'auto',
-    minHeight: 150,
-    maxHeight: 250,
-    resizeMode: 'contain',
-    backgroundColor: '#f1f1f1',
-    marginVertical: 8,
-    // borderRadius: 5
+    width: "100%",
+    resizeMode: "cover",
+    height: undefined,
+    aspectRatio: 1,
+    borderRadius: 8,
+    marginVertical: 6
   },
   content: {
     flexWrap: 'wrap',
