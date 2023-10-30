@@ -1,14 +1,17 @@
-import { Text, View, TextInput, StyleSheet, Alert, TouchableOpacity, FlatList } from "react-native";
-import React, { useState } from 'react'
+import { Text, View, TextInput, StyleSheet, Alert, TouchableOpacity, FlatList, RefreshControl } from "react-native";
+import React, { useEffect, useState } from 'react'
 import { Link, useRouter } from "expo-router";
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import AddGroup from "../../components/AddGroup";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const Group = ({ data }) => {
-  const { id, groupName, groupMembers } = data.item
+  const { id, groupName, createdBy } = data.item
   return (
     <View style={styles.groupIdvContainer}>
       <Text style={styles.groupName}>{groupName}</Text>
-      <Text style={styles.groupMembers}>Members: {groupMembers}</Text>
+      <Text style={styles.createdBy}>Created By: {createdBy}</Text>
     </View>
   )
 }
@@ -16,48 +19,65 @@ const Group = ({ data }) => {
 const Groups = () => {
   const insets = useSafeAreaInsets();
 
+  const [groups, setGroups] = useState([])
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
 
-  const [groups, setGroups] = useState([
-    {
-      id: '1',
-      groupName: 'Placement',
-      groupMembers: 24,
-    },
-    {
-      id: '2',
-      groupName: 'Tech Community',
-      groupMembers: 26,
-    },
-    {
-      id: '3',
-      groupName: 'Finance',
-      groupMembers: 29,
-    },
-    {
-      id: '4',
-      groupName: 'GDC',
-      groupMembers: 24,
-    }
-  ])
+  const q = query(collection(db, 'groups'), orderBy('groupName'))
+  const getGroups = async () => {
+    const groupSnapshot = await getDocs(q)
+    const groupTemp = []
+    groupSnapshot.docs.map((p) => {
+      groupTemp.push(p.data())
+    })
+    setGroups(groupTemp)
+    return groupTemp
+  }
 
+  const loadGroups = async () => {
+    await getGroups()
+  }
+
+  const onAddGroup = () => {
+    setIsModalVisible(true);
+  };
+
+  const onModalClose = () => {
+    setIsModalVisible(false);
+  };
+
+  useEffect(async () => {
+    return await getGroups()
+  }, [])
+
+  console.log(groups)
 
   return (
-    <View style={{ marginTop: insets.top, paddingTop: 12, flexDirection: 'column', flexDirection: "column", backgroundColor: "white" }}>
+    <View style={{
+      opacity: isModalVisible ? 0.1 : 1,
+      marginTop: insets.top,
+      paddingTop: 12,
+      flexDirection: 'column',
+      flexDirection: "column",
+      backgroundColor: 'white'
+    }}>
       {/* header */}
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>Groups</Text>
-        <Link href="/AddPost" asChild>
-          <TouchableOpacity style={styles.submit}>
-            <Text style={styles.headBtnText}>Add Group</Text>
-          </TouchableOpacity>
-        </Link>
+        <TouchableOpacity onPress={onAddGroup} style={styles.submit}>
+          <Text style={styles.headBtnText}>Add Group</Text>
+        </TouchableOpacity>
       </View>
       <FlatList
         data={groups}
         renderItem={(group) => <Group data={group} />}
         keyExtractor={group => group.id}
         contentContainerStyle={styles.groupsContainer}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={loadGroups} />
+        }
       />
+      <AddGroup loadGroups={loadGroups} isVisible={isModalVisible} onClose={onModalClose}></AddGroup>
     </View>
   )
 }
@@ -117,7 +137,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 4.
   },
-  groupgroupMembers: {
+  groupcreatedBy: {
     fontSize: 10,
   }
 });

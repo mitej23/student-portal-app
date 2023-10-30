@@ -15,13 +15,28 @@ export const AuthStore = new Store({
   user: null,
 });
 
-const unsub = onAuthStateChanged(auth, (user) => {
+const unsub = onAuthStateChanged(auth, async (user) => {
   console.log("onAuthStateChange", user);
-  AuthStore.update((store) => {
-    store.user = user;
-    store.isLoggedIn = user ? true : false;
-    store.initialized = true;
-  });
+  if (user) {
+    let userId = user?.email
+
+    // firestore retrieve user
+    const q = query(collection(db, 'users'), where('email', '==', userId))
+    const userSnapshot = await getDocs(q)
+    const userData = userSnapshot.docs[0].data();
+
+    AuthStore.update((store) => {
+      store.user = userData;
+      store.isLoggedIn = user ? true : false;
+      store.initialized = true;
+    });
+  } else {
+    AuthStore.update((store) => {
+      store.user = user;
+      store.isLoggedIn = user ? true : false;
+      store.initialized = true;
+    });
+  }
 });
 
 export const appSignIn = async (email, password) => {

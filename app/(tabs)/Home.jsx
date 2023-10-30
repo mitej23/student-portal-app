@@ -27,7 +27,6 @@ const Home = () => {
 
   const loadPosts = async () => {
     const temp = await getPosts()
-    console.log(temp)
   }
 
   useEffect(async () => {
