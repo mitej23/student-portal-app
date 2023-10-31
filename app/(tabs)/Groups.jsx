@@ -7,12 +7,23 @@ import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
 
 const Group = ({ data }) => {
-  const { id, groupName, createdBy } = data.item
+  const router = useRouter();
+  const { groupId, groupName, createdBy } = data.item
+
+  const handleGroupNavigation = () => {
+    router?.push({
+      pathname: "/(tabs)/ChatRoom",
+      params: {
+        groupId, groupName, createdBy
+      }
+    });
+  }
+
   return (
-    <View style={styles.groupIdvContainer}>
+    <TouchableOpacity onPress={handleGroupNavigation} style={styles.groupIdvContainer}>
       <Text style={styles.groupName}>{groupName}</Text>
       <Text style={styles.createdBy}>Created By: {createdBy}</Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 
@@ -28,7 +39,11 @@ const Groups = () => {
     const groupSnapshot = await getDocs(q)
     const groupTemp = []
     groupSnapshot.docs.map((p) => {
-      groupTemp.push(p.data())
+      const data = {
+        ...p.data(),
+        groupId: p.id
+      }
+      groupTemp.push(data)
     })
     setGroups(groupTemp)
     return groupTemp
@@ -46,8 +61,11 @@ const Groups = () => {
     setIsModalVisible(false);
   };
 
-  useEffect(async () => {
-    return await getGroups()
+  useEffect(() => {
+    getGroups()
+    return () => {
+
+    }
   }, [])
 
   console.log(groups)

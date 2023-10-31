@@ -7,7 +7,12 @@ export default function Root() {
   return (
     // Setup the auth context and render our layout inside of it.
     <Tabs
-      screenOptions={{ headerShown: false }}
+      screenOptions={({ route }) => ({
+        tabBarStyle: {
+          display: route.name === 'ChatRoom' ? 'none' : 'flex',
+        },
+        headerShown: false
+      })}
     >
       <Tabs.Screen
         name="Home"
@@ -22,6 +27,11 @@ export default function Root() {
             );
           },
         }}
+        screenOptions={({ route }) => ({
+          tabBarStyle: {
+            display: route.name === 'ChatRoom' ? 'none' : 'flex',
+          },
+        })}
       />
       <Tabs.Screen
         name="Groups"
@@ -31,6 +41,12 @@ export default function Root() {
               <MaterialCommunityIcons name={focused ? "account-group" : "account-group-outline"} size={24} color="black" />
             );
           },
+        }}
+      />
+      <Tabs.Screen
+        name="ChatRoom"
+        options={{
+          tabBarButton: () => null
         }}
       />
       <Tabs.Screen

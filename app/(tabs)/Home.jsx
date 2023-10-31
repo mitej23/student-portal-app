@@ -15,22 +15,33 @@ const Home = () => {
   const [posts, setPosts] = useState([])
 
   const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'))
+
+
+  const loadPosts = async () => {
+    const temp = await getPosts()
+    return temp
+  }
+
   const getPosts = async () => {
     const postSnapshot = await getDocs(q)
     const postTemp = []
     postSnapshot.docs.map((p) => {
-      postTemp.push(p.data())
+      const data = {
+        ...p.data(),
+        postId: p.id
+      }
+      postTemp.push(data)
     })
     setPosts(postTemp)
     return postTemp
   }
 
-  const loadPosts = async () => {
-    const temp = await getPosts()
-  }
+  useEffect(() => {
+    getPosts()
 
-  useEffect(async () => {
-    return await getPosts()
+    return () => {
+
+    }
   }, [])
 
   return (
@@ -47,7 +58,7 @@ const Home = () => {
       <FlatList
         data={posts}
         renderItem={(post) => <Post data={post} />}
-        keyExtractor={post => post.id}
+        keyExtractor={post => post.postId}
         contentContainerStyle={styles.postContainer}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={loadPosts} />
@@ -93,7 +104,8 @@ const styles = StyleSheet.create({
     height: 'auto'
   },
   postContainer: {
-    paddingBottom: 30
+    paddingBottom: 30,
+    backgroundColor: '#dadada'
   }
 });
 
