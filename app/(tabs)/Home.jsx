@@ -39,9 +39,7 @@ const Home = () => {
   useEffect(() => {
     getPosts()
 
-    return () => {
-
-    }
+    return () => { }
   }, [])
 
   return (

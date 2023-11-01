@@ -12,12 +12,15 @@ const Settings = () => {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   // const emailRef = useRef("");
-  const [email, setEmail] = useState('')
+
+  const user = AuthStore?.currentState?.user
+
+  const [email, setEmail] = useState(user.email)
   const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [course, setCourse] = useState();
-  const [batch, setBatch] = useState();
+  const [firstName, setFirstName] = useState(user.firstName);
+  const [lastName, setLastName] = useState(user.lastName);
+  const [course, setCourse] = useState(user.course);
+  const [batch, setBatch] = useState(user.batch);
   const [interactionComplete, setInteractionComplete] = useState(true);
 
   const logout = async () => {
@@ -44,11 +47,11 @@ const Settings = () => {
               elevation={1}
               editable={true}
               style={styles.container}
-              onChangeText={(e) => {
-                setEmail(e);
-              }}
+            // onChangeText={(e) => {
+            //   setEmail(e);
+            // }}
             ></TextInput>
-            <Text style={styles.label}>Enter Password</Text>
+            {/* <Text style={styles.label}>Enter Password</Text>
             <TextInput
               type="password"
               name="password"
@@ -62,7 +65,7 @@ const Settings = () => {
               onChangeText={(e) => {
                 setPassword(e);
               }}
-            ></TextInput>
+            ></TextInput> */}
             <Text style={styles.label}>Enter First Name:</Text>
             <TextInput
               type="text"
@@ -73,9 +76,9 @@ const Settings = () => {
               elevation={1}
               editable={true}
               style={styles.container}
-              onChangeText={(e) => {
-                setFirstName(e);
-              }}
+            // onChangeText={(e) => {
+            //   setFirstName(e);
+            // }}
             ></TextInput>
             <Text style={styles.label}>Enter First Name:</Text>
             <TextInput
@@ -87,16 +90,16 @@ const Settings = () => {
               elevation={1}
               editable={true}
               style={styles.container}
-              onChangeText={(e) => {
-                setLastName(e);
-              }}
+            // onChangeText={(e) => {
+            //   setLastName(e);
+            // }}
             ></TextInput>
             <Text style={styles.label}>Select Course:</Text>
             <View style={styles.picker}>
               <Picker
                 selectedValue={course}
-                onValueChange={(itemValue, itemIndex) =>
-                  setCourse(itemValue)
+                onValueChange={(itemValue, itemIndex) => { }
+                  // setCourse(itemValue)
                 }>
                 <Picker.Item label="MCA" value="mca" />
                 <Picker.Item label="B.Tech" value="btech" />
@@ -107,8 +110,8 @@ const Settings = () => {
             <View style={styles.picker}>
               <Picker
                 selectedValue={batch}
-                onValueChange={(itemValue, itemIndex) =>
-                  setBatch(itemValue)
+                onValueChange={(itemValue, itemIndex) => { }
+                  // setBatch(itemValue)
                 }>
                 <Picker.Item label="2020" value="2020" />
                 <Picker.Item label="2021" value="2021" />

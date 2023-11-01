@@ -197,7 +197,7 @@ export default Post
 const styles = StyleSheet.create({
   postContainer: {
     paddingVertical: 12,
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
     borderBottomColor: 'lightgray',
     borderBottomWidth: 1,
     backgroundColor: 'white',

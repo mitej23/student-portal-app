@@ -97,6 +97,8 @@ export const appSignUp = async (email,
           batch,
           userId: user.uid
         });
+        console.log("user from set doc")
+        console.log(user)
         return user
       } catch (error) {
         console.log(error)
@@ -104,12 +106,20 @@ export const appSignUp = async (email,
 
     });
 
+    let userEmail = resp?.email
+    console.log(email)
+
+    // firestore retrieve user
+    const q = query(collection(db, 'users'), where('email', '==', userEmail))
+    const userSnapshot = await getDocs(q)
+    const userData = userSnapshot.docs[0].data();
+
     // add the displayName
     displayName = firstName + " " + lastName
     await updateProfile(resp, { displayName });
 
     AuthStore.update((store) => {
-      store.user = auth.currentUser;
+      store.user = userData;
       store.isLoggedIn = true;
     });
 
